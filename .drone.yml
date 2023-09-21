@@ -759,8 +759,10 @@
 ---
 {
    "depends_on": [
-      "default-amd64",
-      "default-arm64"
+      "ci-images-amd64",
+      "ci-images-arm64",
+      "pkg-images-amd64",
+      "pkg-images-arm64"
    ],
    "kind": "pipeline",
    "name": "multiarchify_the_rest",

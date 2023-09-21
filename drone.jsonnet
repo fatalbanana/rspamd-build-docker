@@ -321,8 +321,10 @@ local final_multiarch_steps = {
 local multiarchify_the_rest = {
   name: 'multiarchify_the_rest',
   depends_on: [
-    'default-amd64',
-    'default-arm64',
+    'ci-images-amd64',
+    'ci-images-arm64',
+    'pkg-images-amd64',
+    'pkg-images-arm64',
   ],
 } + final_multiarch_steps + pipeline_defaults;
 
