@@ -204,7 +204,7 @@
       "multiarch_test_image"
    ],
    "kind": "pipeline",
-   "name": "default-amd64",
+   "name": "ci-images-amd64",
    "platform": {
       "arch": "amd64",
       "os": "linux"
@@ -298,7 +298,146 @@
                "from_secret": "docker_username"
             }
          }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "multiarch_test_image"
+   ],
+   "kind": "pipeline",
+   "name": "ci-images-arm64",
+   "platform": {
+      "arch": "arm64",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "build_image",
+         "settings": {
+            "dockerfile": "ubuntu-build/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-build/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "nerfd/ci",
+            "tags": [
+               "ubuntu-build-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
       },
+      {
+         "image": "plugins/docker",
+         "name": "func_test_image",
+         "settings": {
+            "dockerfile": "ubuntu-test-func/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-test-func/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "nerfd/ci",
+            "tags": [
+               "ubuntu-test-func-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "image": "plugins/docker",
+         "name": "fedora_build_image",
+         "settings": {
+            "build_args": [
+               "FEDORA_VERSION=38"
+            ],
+            "dockerfile": "fedora-build/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=fedora-build/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "nerfd/ci",
+            "tags": [
+               "fedora-build-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      },
+      {
+         "depends_on": [
+            "fedora_build_image"
+         ],
+         "image": "plugins/docker",
+         "name": "fedora_test_image",
+         "settings": {
+            "build_args": [
+               "FEDORA_VERSION=38"
+            ],
+            "dockerfile": "fedora-test/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=fedora-test/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "nerfd/ci",
+            "tags": [
+               "fedora-test-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "multiarch_test_image"
+   ],
+   "kind": "pipeline",
+   "name": "pkg-images-amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
       {
          "image": "plugins/docker",
          "name": "centos8_pkg_image",
@@ -458,101 +597,12 @@
       "multiarch_test_image"
    ],
    "kind": "pipeline",
-   "name": "default-arm64",
+   "name": "pkg-images-arm64",
    "platform": {
       "arch": "arm64",
       "os": "linux"
    },
    "steps": [
-      {
-         "image": "plugins/docker",
-         "name": "build_image",
-         "settings": {
-            "dockerfile": "ubuntu-build/Dockerfile",
-            "label_schema": [
-               "docker.dockerfile=ubuntu-build/Dockerfile"
-            ],
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "repo": "nerfd/ci",
-            "tags": [
-               "ubuntu-build-arm64"
-            ],
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
-      {
-         "image": "plugins/docker",
-         "name": "func_test_image",
-         "settings": {
-            "dockerfile": "ubuntu-test-func/Dockerfile",
-            "label_schema": [
-               "docker.dockerfile=ubuntu-test-func/Dockerfile"
-            ],
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "repo": "nerfd/ci",
-            "tags": [
-               "ubuntu-test-func-arm64"
-            ],
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
-      {
-         "image": "plugins/docker",
-         "name": "fedora_build_image",
-         "settings": {
-            "build_args": [
-               "FEDORA_VERSION=38"
-            ],
-            "dockerfile": "fedora-build/Dockerfile",
-            "label_schema": [
-               "docker.dockerfile=fedora-build/Dockerfile"
-            ],
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "repo": "nerfd/ci",
-            "tags": [
-               "fedora-build-arm64"
-            ],
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
-      {
-         "depends_on": [
-            "fedora_build_image"
-         ],
-         "image": "plugins/docker",
-         "name": "fedora_test_image",
-         "settings": {
-            "build_args": [
-               "FEDORA_VERSION=38"
-            ],
-            "dockerfile": "fedora-test/Dockerfile",
-            "label_schema": [
-               "docker.dockerfile=fedora-test/Dockerfile"
-            ],
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "repo": "nerfd/ci",
-            "tags": [
-               "fedora-test-arm64"
-            ],
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
       {
          "image": "plugins/docker",
          "name": "centos8_pkg_image",
@@ -962,3 +1012,4 @@
    "hmac": "0000000000000000000000000000000000000000000000000000000000000000",
    "kind": "signature"
 }
+...

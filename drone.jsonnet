@@ -108,15 +108,11 @@ local test_image_pipeline(arch) = {
   ],
 } + platform(arch) + pipeline_defaults;
 
-local build_the_rest_pipeline(arch) = {
+local build_ci_images(arch) = {
   depends_on: [
     'multiarch_test_image',
   ],
-  name: 'default-' + arch,
-  platform: {
-    os: 'linux',
-    arch: arch,
-  },
+  name: 'ci-images-' + arch,
   steps: [
     {
       name: 'build_image',
@@ -183,6 +179,15 @@ local build_the_rest_pipeline(arch) = {
         'fedora_build_image',
       ],
     },
+  ],
+} + platform(arch) + trigger + pipeline_defaults;
+
+local build_pkg_images(arch) = {
+  depends_on: [
+    'multiarch_test_image',
+  ],
+  name: 'pkg-images-' + arch,
+  steps: [
     {
       name: 'centos8_pkg_image',
       image: 'plugins/docker',
@@ -282,7 +287,7 @@ local build_the_rest_pipeline(arch) = {
       } + docker_defaults,
     },
   ],
-} + trigger + pipeline_defaults;
+} + platform(arch) + trigger + pipeline_defaults;
 
 local multiarch_step(step_name, image_name, image_tag) = {
   name: step_name,
@@ -366,8 +371,10 @@ local signature_placeholder = {
   test_image_pipeline('amd64'),
   test_image_pipeline('arm64'),
   multiarch_test_image,
-  build_the_rest_pipeline('amd64'),
-  build_the_rest_pipeline('arm64'),
+  build_ci_images('amd64'),
+  build_ci_images('arm64'),
+  build_pkg_images('amd64'),
+  build_pkg_images('arm64'),
   multiarchify_the_rest,
   tidyall_pipeline,
   signature_placeholder,
