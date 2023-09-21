@@ -44,7 +44,7 @@
    "kind": "pipeline",
    "name": "base_image_amd64",
    "platform": {
-      "arch": "arch",
+      "arch": "amd64",
       "os": "linux"
    },
    "steps": [
@@ -79,7 +79,7 @@
    "kind": "pipeline",
    "name": "base_image_arm64",
    "platform": {
-      "arch": "arch",
+      "arch": "arm64",
       "os": "linux"
    },
    "steps": [
@@ -147,7 +147,7 @@
    "kind": "pipeline",
    "name": "test_image_amd64",
    "platform": {
-      "arch": "arch",
+      "arch": "amd64",
       "os": "linux"
    },
    "steps": [
@@ -182,7 +182,7 @@
    "kind": "pipeline",
    "name": "test_image_arm64",
    "platform": {
-      "arch": "arch",
+      "arch": "arm64",
       "os": "linux"
    },
    "steps": [
