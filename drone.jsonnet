@@ -118,7 +118,6 @@ local build_the_rest_pipeline(arch) = {
     arch: arch,
   },
   steps: [
-    // FIXME: junk? delete?
     {
       name: 'build_image',
       image: 'plugins/docker',
