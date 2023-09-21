@@ -13,7 +13,6 @@ platform:
 x-default-settings: &default_settings
   username: { from_secret: docker_username }
   password: { from_secret: docker_password }
-  purge: false
 
 x-versions:
   alpine: &alpine_version ALPINE_VERSION=3.17.0
