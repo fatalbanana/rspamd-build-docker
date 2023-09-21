@@ -17,7 +17,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "perl-tidyall"
             ],
@@ -62,7 +62,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "ubuntu-gcc-amd64"
             ],
@@ -85,7 +85,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "ubuntu-build-amd64"
             ],
@@ -108,7 +108,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "ubuntu-test-amd64"
             ],
@@ -131,7 +131,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "ubuntu-test-func-amd64"
             ],
@@ -154,7 +154,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "fedora-build-amd64"
             ],
@@ -180,7 +180,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "fedora-test-amd64"
             ],
@@ -200,7 +200,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "centos-8-amd64"
             ],
@@ -220,7 +220,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "centos-9-amd64"
             ],
@@ -240,7 +240,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "centos-7-amd64"
             ],
@@ -260,7 +260,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "ubuntu-jammy-amd64"
             ],
@@ -280,7 +280,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "ubuntu-focal-amd64"
             ],
@@ -300,7 +300,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "debian-bullseye-amd64"
             ],
@@ -320,7 +320,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "debian-bookworm-amd64"
             ],
@@ -365,7 +365,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "ubuntu-gcc-arm64"
             ],
@@ -388,7 +388,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "ubuntu-build-arm64"
             ],
@@ -411,7 +411,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "ubuntu-test-arm64"
             ],
@@ -434,7 +434,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "ubuntu-test-func-arm64"
             ],
@@ -457,7 +457,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "fedora-build-arm64"
             ],
@@ -483,7 +483,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/ci",
+            "repo": "nerfd/ci",
             "tags": [
                "fedora-test-arm64"
             ],
@@ -503,7 +503,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "centos-8-arm64"
             ],
@@ -523,7 +523,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "centos-9-arm64"
             ],
@@ -543,7 +543,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "centos-7-arm64"
             ],
@@ -563,7 +563,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "ubuntu-jammy-arm64"
             ],
@@ -583,7 +583,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "ubuntu-focal-arm64"
             ],
@@ -603,7 +603,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "debian-bullseye-arm64"
             ],
@@ -623,7 +623,7 @@
             "password": {
                "from_secret": "docker_password"
             },
-            "repo": "rspamd/pkg",
+            "repo": "nerfd/pkg",
             "tags": [
                "debian-bookworm-arm64"
             ],
@@ -665,8 +665,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/ci:ubuntu-gcc",
-            "template": "rspamd/ci:ubuntu-gcc-ARCH",
+            "target": "nerfd/ci:ubuntu-gcc",
+            "template": "nerfd/ci:ubuntu-gcc-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -683,8 +683,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/ci:ubuntu-build",
-            "template": "rspamd/ci:ubuntu-build-ARCH",
+            "target": "nerfd/ci:ubuntu-build",
+            "template": "nerfd/ci:ubuntu-build-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -701,8 +701,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/ci:ubuntu-test",
-            "template": "rspamd/ci:ubuntu-test-ARCH",
+            "target": "nerfd/ci:ubuntu-test",
+            "template": "nerfd/ci:ubuntu-test-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -719,8 +719,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/ci:ubuntu-test-func",
-            "template": "rspamd/ci:ubuntu-test-func-ARCH",
+            "target": "nerfd/ci:ubuntu-test-func",
+            "template": "nerfd/ci:ubuntu-test-func-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -737,8 +737,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/ci:fedora-build",
-            "template": "rspamd/ci:fedora-build-ARCH",
+            "target": "nerfd/ci:fedora-build",
+            "template": "nerfd/ci:fedora-build-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -755,8 +755,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/ci:fedora-test",
-            "template": "rspamd/ci:fedora-test-ARCH",
+            "target": "nerfd/ci:fedora-test",
+            "template": "nerfd/ci:fedora-test-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -773,8 +773,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/pkg:centos-7",
-            "template": "rspamd/pkg:centos-7-ARCH",
+            "target": "nerfd/pkg:centos-7",
+            "template": "nerfd/pkg:centos-7-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -791,8 +791,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/pkg:centos-8",
-            "template": "rspamd/pkg:centos-8-ARCH",
+            "target": "nerfd/pkg:centos-8",
+            "template": "nerfd/pkg:centos-8-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -809,8 +809,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/pkg:centos-9",
-            "template": "rspamd/pkg:centos-9-ARCH",
+            "target": "nerfd/pkg:centos-9",
+            "template": "nerfd/pkg:centos-9-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -827,8 +827,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/pkg:ubuntu-focal",
-            "template": "rspamd/pkg:ubuntu-focal-ARCH",
+            "target": "nerfd/pkg:ubuntu-focal",
+            "template": "nerfd/pkg:ubuntu-focal-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -845,8 +845,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/pkg:ubuntu-jammy",
-            "template": "rspamd/pkg:ubuntu-jammy-ARCH",
+            "target": "nerfd/pkg:ubuntu-jammy",
+            "template": "nerfd/pkg:ubuntu-jammy-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -863,8 +863,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/pkg:debian-bullseye",
-            "template": "rspamd/pkg:debian-bullseye-ARCH",
+            "target": "nerfd/pkg:debian-bullseye",
+            "template": "nerfd/pkg:debian-bullseye-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
@@ -881,8 +881,8 @@
                "linux/amd64",
                "linux/arm64"
             ],
-            "target": "rspamd/pkg:debian-bookworm",
-            "template": "rspamd/pkg:debian-bookworm-ARCH",
+            "target": "nerfd/pkg:debian-bookworm",
+            "template": "nerfd/pkg:debian-bookworm-ARCH",
             "username": {
                "from_secret": "docker_username"
             }

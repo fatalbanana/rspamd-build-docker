@@ -1,5 +1,5 @@
-local ci_image = 'rspamd/ci';
-local pkg_image = 'rspamd/pkg';
+local ci_image = 'nerfd/ci';
+local pkg_image = 'nerfd/pkg';
 
 local ALPINE_VERSION = '3.17.0';
 local FEDORA_VERSION = '38';
