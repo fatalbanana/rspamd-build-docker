@@ -55,12 +55,15 @@ local tidyall_pipeline = {
   ],
 } + trigger + pipeline_defaults;
 
-local archspecific_pipeline(arch) = {
-  name: 'default-' + arch,
+local platform(arch) = {
   platform: {
     os: 'linux',
     arch: arch,
   },
+};
+
+local base_image_pipeline(arch) = {
+  name: 'base_image_' + arch,
   steps: [
     {
       name: 'base_image',
@@ -79,23 +82,15 @@ local archspecific_pipeline(arch) = {
         ],
       } + docker_defaults,
     },
-    {
-      name: 'build_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'ubuntu-build/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=ubuntu-build/Dockerfile',
-        ],
-        repo: ci_image,
-        tags: [
-          'ubuntu-build-' + arch,
-        ],
-      } + docker_defaults,
-      depends_on: [
-        'base_image',
-      ],
-    },
+  ],
+} + platform('arch');
+
+local test_image_pipeline(arch) = {
+  depends_on: [
+    'multiarch_base_image',
+  ],
+  name: 'test_image_' + arch,
+  steps: [
     {
       name: 'test_image',
       image: 'plugins/docker',
@@ -109,9 +104,34 @@ local archspecific_pipeline(arch) = {
           'ubuntu-test-' + arch,
         ],
       } + docker_defaults,
-      depends_on: [
-        'build_image',
-      ],
+    },
+  ],
+} + platform('arch');
+
+local build_the_rest_pipeline(arch) = {
+  depends_on: [
+    'multiarch_test_image',
+  ],
+  name: 'default-' + arch,
+  platform: {
+    os: 'linux',
+    arch: arch,
+  },
+  steps: [
+    // FIXME: junk? delete?
+    {
+      name: 'build_image',
+      image: 'plugins/docker',
+      settings: {
+        dockerfile: 'ubuntu-build/Dockerfile',
+        label_schema: [
+          'docker.dockerfile=ubuntu-build/Dockerfile',
+        ],
+        repo: ci_image,
+        tags: [
+          'ubuntu-build-' + arch,
+        ],
+      } + docker_defaults,
     },
     {
       name: 'func_test_image',
@@ -126,9 +146,6 @@ local archspecific_pipeline(arch) = {
           'ubuntu-test-func-' + arch,
         ],
       } + docker_defaults,
-      depends_on: [
-        'test_image',
-      ],
     },
     {
       name: 'fedora_build_image',
@@ -268,28 +285,22 @@ local archspecific_pipeline(arch) = {
   ],
 } + trigger + pipeline_defaults;
 
-local multiarch_pipeline = {
-  name: 'multiarchify',
-  depends_on: [
-    'default-amd64',
-    'default-arm64',
-  ],
-  local multiarch_step(step_name, image_name, image_tag) = {
-    name: step_name,
-    image: 'plugins/manifest',
-    settings: {
-      target: std.format('%s:%s', [image_name, image_tag]),
-      template: std.format('%s:%s-ARCH', [image_name, image_tag]),
-      platforms: [
-        'linux/amd64',
-        'linux/arm64',
-      ],
-    } + docker_defaults,
-  },
+local multiarch_step(step_name, image_name, image_tag) = {
+  name: step_name,
+  image: 'plugins/manifest',
+  settings: {
+    target: std.format('%s:%s', [image_name, image_tag]),
+    template: std.format('%s:%s-ARCH', [image_name, image_tag]),
+    platforms: [
+      'linux/amd64',
+      'linux/arm64',
+    ],
+  } + docker_defaults,
+};
+
+local final_multiarch_steps = {
   steps: [
-    multiarch_step('ci_ubuntu_gcc', ci_image, 'ubuntu-gcc'),
-    multiarch_step('ci_ubuntu_build', ci_image, 'ubuntu-build'),
-    multiarch_step('ci_ubuntu_test', ci_image, 'ubuntu-test'),
+    multiarch_step('build_image', ci_image, 'ubuntu-build'),
     multiarch_step('ci_ubuntu_test_func', ci_image, 'ubuntu-test-func'),
     multiarch_step('ci_fedora_build', ci_image, 'fedora-build'),
     multiarch_step('ci_fedora_test', ci_image, 'fedora-test'),
@@ -301,6 +312,47 @@ local multiarch_pipeline = {
     multiarch_step('pkg_debian11', pkg_image, 'debian-bullseye'),
     multiarch_step('pkg_debian12', pkg_image, 'debian-bookworm'),
   ],
+};
+
+local multiarchify_the_rest = {
+  name: 'multiarchify_the_rest',
+  depends_on: [
+    'default-amd64',
+    'default-arm64',
+  ],
+} + final_multiarch_steps + pipeline_defaults;
+
+local multiarch_base_image = {
+  name: 'multiarch_base_image',
+  depends_on: [
+    'base_image_amd64',
+    'base_image_arm64',
+  ],
+  steps: [
+    multiarch_step('multiarch_base_image', ci_image, 'ubuntu-gcc'),
+  ],
+} + pipeline_defaults;
+
+local multiarch_build_image = {
+  name: 'multiarch_build_image',
+  depends_on: [
+    'build_image_amd64',
+    'build_image_arm64',
+  ],
+  steps: [
+    multiarch_step('multiarch_build_image', ci_image, 'ubuntu-build'),
+  ],
+} + pipeline_defaults;
+
+local multiarch_test_image = {
+  name: 'multiarch_test_image',
+  depends_on: [
+    'test_image_amd64',
+    'test_image_arm64',
+  ],
+  steps: [
+    multiarch_step('multiarch_test_image', ci_image, 'ubuntu-test'),
+  ],
 } + pipeline_defaults;
 
 local signature_placeholder = {
@@ -310,8 +362,14 @@ local signature_placeholder = {
 
 [
   tidyall_pipeline,
-  archspecific_pipeline('amd64'),
-  archspecific_pipeline('arm64'),
-  multiarch_pipeline,
+  base_image_pipeline('amd64'),
+  base_image_pipeline('arm64'),
+  multiarch_base_image,
+  test_image_pipeline('amd64'),
+  test_image_pipeline('arm64'),
+  multiarch_test_image,
+  build_the_rest_pipeline('amd64'),
+  build_the_rest_pipeline('arm64'),
+  multiarchify_the_rest,
   signature_placeholder,
 ]
