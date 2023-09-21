@@ -360,7 +360,6 @@ local signature_placeholder = {
 };
 
 [
-  tidyall_pipeline,
   base_image_pipeline('amd64'),
   base_image_pipeline('arm64'),
   multiarch_base_image,
@@ -370,5 +369,6 @@ local signature_placeholder = {
   build_the_rest_pipeline('amd64'),
   build_the_rest_pipeline('arm64'),
   multiarchify_the_rest,
+  tidyall_pipeline,
   signature_placeholder,
 ]
