@@ -14,83 +14,27 @@ local docker_defaults = {
   },
 };
 
-local docker_pipeline = {
+local pipeline_defaults = {
   kind: 'pipeline',
   type: 'docker',
-  name: 'default-amd64',
-  platform: {
-    os: 'linux',
-    arch: 'amd64',
+};
+
+local trigger = {
+  trigger: {
+    branch: [
+      'master',
+    ],
+    event: [
+      'push',
+      'tag',
+      'custom',
+    ],
   },
+};
+
+local tidyall_pipeline = {
+  name: 'tidyall',
   steps: [
-    {
-      name: 'base_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'ubuntu-gcc/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=ubuntu-gcc/Dockerfile',
-        ],
-        build_args: [
-          'UBUNTU_VERSION=' + UBUNTU_VERSION,
-        ],
-        repo: ci_image,
-        tags: [
-          'ubuntu-gcc',
-        ],
-      } + docker_defaults,
-    },
-    {
-      name: 'build_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'ubuntu-build/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=ubuntu-build/Dockerfile',
-        ],
-        repo: ci_image,
-        tags: [
-          'ubuntu-build',
-        ],
-      } + docker_defaults,
-      depends_on: [
-        'base_image',
-      ],
-    },
-    {
-      name: 'test_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'ubuntu-test/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=ubuntu-test/Dockerfile',
-        ],
-        repo: ci_image,
-        tags: [
-          'ubuntu-test',
-        ],
-      } + docker_defaults,
-      depends_on: [
-        'build_image',
-      ],
-    },
-    {
-      name: 'func_test_image',
-      image: 'plugins/docker',
-      settings: {
-        dockerfile: 'ubuntu-test-func/Dockerfile',
-        label_schema: [
-          'docker.dockerfile=ubuntu-test-func/Dockerfile',
-        ],
-        repo: ci_image,
-        tags: [
-          'ubuntu-test-func',
-        ],
-      } + docker_defaults,
-      depends_on: [
-        'test_image',
-      ],
-    },
     {
       name: 'perl_tidyall_image',
       image: 'plugins/docker',
@@ -108,6 +52,84 @@ local docker_pipeline = {
         ],
       } + docker_defaults,
     },
+  ],
+} + trigger + pipeline_defaults;
+
+local archspecific_pipeline(arch) = {
+  name: 'default-' + arch,
+  platform: {
+    os: 'linux',
+    arch: arch,
+  },
+  steps: [
+    {
+      name: 'base_image',
+      image: 'plugins/docker',
+      settings: {
+        dockerfile: 'ubuntu-gcc/Dockerfile',
+        label_schema: [
+          'docker.dockerfile=ubuntu-gcc/Dockerfile',
+        ],
+        build_args: [
+          'UBUNTU_VERSION=' + UBUNTU_VERSION,
+        ],
+        repo: ci_image,
+        tags: [
+          'ubuntu-gcc-' + arch,
+        ],
+      } + docker_defaults,
+    },
+    {
+      name: 'build_image',
+      image: 'plugins/docker',
+      settings: {
+        dockerfile: 'ubuntu-build/Dockerfile',
+        label_schema: [
+          'docker.dockerfile=ubuntu-build/Dockerfile',
+        ],
+        repo: ci_image,
+        tags: [
+          'ubuntu-build-' + arch,
+        ],
+      } + docker_defaults,
+      depends_on: [
+        'base_image',
+      ],
+    },
+    {
+      name: 'test_image',
+      image: 'plugins/docker',
+      settings: {
+        dockerfile: 'ubuntu-test/Dockerfile',
+        label_schema: [
+          'docker.dockerfile=ubuntu-test/Dockerfile',
+        ],
+        repo: ci_image,
+        tags: [
+          'ubuntu-test-' + arch,
+        ],
+      } + docker_defaults,
+      depends_on: [
+        'build_image',
+      ],
+    },
+    {
+      name: 'func_test_image',
+      image: 'plugins/docker',
+      settings: {
+        dockerfile: 'ubuntu-test-func/Dockerfile',
+        label_schema: [
+          'docker.dockerfile=ubuntu-test-func/Dockerfile',
+        ],
+        repo: ci_image,
+        tags: [
+          'ubuntu-test-func-' + arch,
+        ],
+      } + docker_defaults,
+      depends_on: [
+        'test_image',
+      ],
+    },
     {
       name: 'fedora_build_image',
       image: 'plugins/docker',
@@ -121,7 +143,7 @@ local docker_pipeline = {
         ],
         repo: ci_image,
         tags: [
-          'fedora-build',
+          'fedora-build-' + arch,
         ],
       } + docker_defaults,
     },
@@ -138,7 +160,7 @@ local docker_pipeline = {
         ],
         repo: 'rspamd/ci',
         tags: [
-          'fedora-test',
+          'fedora-test-' + arch,
         ],
       } + docker_defaults,
       depends_on: [
@@ -155,7 +177,7 @@ local docker_pipeline = {
         ],
         repo: pkg_image,
         tags: [
-          'centos-8',
+          'centos-8-' + arch,
         ],
       } + docker_defaults,
     },
@@ -169,7 +191,7 @@ local docker_pipeline = {
         ],
         repo: pkg_image,
         tags: [
-          'centos-9',
+          'centos-9-' + arch,
         ],
       } + docker_defaults,
     },
@@ -183,7 +205,7 @@ local docker_pipeline = {
         ],
         repo: pkg_image,
         tags: [
-          'centos-7',
+          'centos-7-' + arch,
         ],
       } + docker_defaults,
     },
@@ -197,7 +219,7 @@ local docker_pipeline = {
         ],
         repo: pkg_image,
         tags: [
-          'ubuntu-jammy',
+          'ubuntu-jammy-' + arch,
         ],
       } + docker_defaults,
     },
@@ -211,7 +233,7 @@ local docker_pipeline = {
         ],
         repo: pkg_image,
         tags: [
-          'ubuntu-focal',
+          'ubuntu-focal-' + arch,
         ],
       } + docker_defaults,
     },
@@ -225,7 +247,7 @@ local docker_pipeline = {
         ],
         repo: pkg_image,
         tags: [
-          'debian-bullseye',
+          'debian-bullseye-' + arch,
         ],
       } + docker_defaults,
     },
@@ -239,22 +261,47 @@ local docker_pipeline = {
         ],
         repo: pkg_image,
         tags: [
-          'debian-bookworm',
+          'debian-bookworm-' + arch,
         ],
       } + docker_defaults,
     },
   ],
-  trigger: {
-    branch: [
-      'master',
-    ],
-    event: [
-      'push',
-      'tag',
-      'custom',
-    ],
+} + trigger + pipeline_defaults;
+
+local multiarch_pipeline = {
+  name: 'multiarchify',
+  depends_on: [
+    'default-amd64',
+    'default-arm64',
+  ],
+  local multiarch_step(step_name, image_name, image_tag) = {
+    name: step_name,
+    image: 'plugins/manifest',
+    settings: {
+      target: std.format('%s:%s', [image_name, image_tag]),
+      template: std.format('%s:%s-ARCH', [image_name, image_tag]),
+      platforms: [
+        'linux/amd64',
+        'linux/arm64',
+      ],
+    } + docker_defaults,
   },
-};
+  steps: [
+    multiarch_step('ci_ubuntu_gcc', ci_image, 'ubuntu-gcc'),
+    multiarch_step('ci_ubuntu_build', ci_image, 'ubuntu-build'),
+    multiarch_step('ci_ubuntu_test', ci_image, 'ubuntu-test'),
+    multiarch_step('ci_ubuntu_test_func', ci_image, 'ubuntu-test-func'),
+    multiarch_step('ci_fedora_build', ci_image, 'fedora-build'),
+    multiarch_step('ci_fedora_test', ci_image, 'fedora-test'),
+    multiarch_step('pkg_centos7', pkg_image, 'centos-7'),
+    multiarch_step('pkg_centos8', pkg_image, 'centos-8'),
+    multiarch_step('pkg_centos9', pkg_image, 'centos-9'),
+    multiarch_step('pkg_ubuntu2004', pkg_image, 'ubuntu-focal'),
+    multiarch_step('pkg_ubuntu2204', pkg_image, 'ubuntu-jammy'),
+    multiarch_step('pkg_debian11', pkg_image, 'debian-bullseye'),
+    multiarch_step('pkg_debian12', pkg_image, 'debian-bookworm'),
+  ],
+} + pipeline_defaults;
 
 local signature_placeholder = {
   kind: 'signature',
@@ -262,6 +309,9 @@ local signature_placeholder = {
 };
 
 [
-  docker_pipeline,
+  tidyall_pipeline,
+  archspecific_pipeline('amd64'),
+  archspecific_pipeline('arm64'),
+  multiarch_pipeline,
   signature_placeholder,
 ]
