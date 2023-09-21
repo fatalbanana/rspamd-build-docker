@@ -1,47 +1,6 @@
 ---
 {
    "kind": "pipeline",
-   "name": "tidyall",
-   "steps": [
-      {
-         "image": "plugins/docker",
-         "name": "perl_tidyall_image",
-         "settings": {
-            "build_args": [
-               "ALPINE_VERSION=3.17.0"
-            ],
-            "dockerfile": "perl-tidyall/Dockerfile",
-            "label_schema": [
-               "docker.dockerfile=perl-tidyall/Dockerfile"
-            ],
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "repo": "nerfd/ci",
-            "tags": [
-               "perl-tidyall"
-            ],
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      }
-   ],
-   "trigger": {
-      "branch": [
-         "master"
-      ],
-      "event": [
-         "push",
-         "tag",
-         "custom"
-      ]
-   },
-   "type": "docker"
-}
----
-{
-   "kind": "pipeline",
    "name": "base_image_amd64",
    "platform": {
       "arch": "amd64",
@@ -959,7 +918,47 @@
 }
 ---
 {
+   "kind": "pipeline",
+   "name": "tidyall",
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "perl_tidyall_image",
+         "settings": {
+            "build_args": [
+               "ALPINE_VERSION=3.17.0"
+            ],
+            "dockerfile": "perl-tidyall/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=perl-tidyall/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "nerfd/ci",
+            "tags": [
+               "perl-tidyall"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "trigger": {
+      "branch": [
+         "master"
+      ],
+      "event": [
+         "push",
+         "tag",
+         "custom"
+      ]
+   },
+   "type": "docker"
+}
+---
+{
    "hmac": "0000000000000000000000000000000000000000000000000000000000000000",
    "kind": "signature"
 }
-...
