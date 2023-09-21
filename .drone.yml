@@ -41,6 +41,7 @@
 }
 ---
 {
+   "kind": "pipeline",
    "name": "base_image_amd64",
    "platform": {
       "arch": "arch",
@@ -70,10 +71,12 @@
             }
          }
       }
-   ]
+   ],
+   "type": "docker"
 }
 ---
 {
+   "kind": "pipeline",
    "name": "base_image_arm64",
    "platform": {
       "arch": "arch",
@@ -103,7 +106,8 @@
             }
          }
       }
-   ]
+   ],
+   "type": "docker"
 }
 ---
 {
@@ -140,6 +144,7 @@
    "depends_on": [
       "multiarch_base_image"
    ],
+   "kind": "pipeline",
    "name": "test_image_amd64",
    "platform": {
       "arch": "arch",
@@ -166,13 +171,15 @@
             }
          }
       }
-   ]
+   ],
+   "type": "docker"
 }
 ---
 {
    "depends_on": [
       "multiarch_base_image"
    ],
+   "kind": "pipeline",
    "name": "test_image_arm64",
    "platform": {
       "arch": "arch",
@@ -199,7 +206,8 @@
             }
          }
       }
-   ]
+   ],
+   "type": "docker"
 }
 ---
 {

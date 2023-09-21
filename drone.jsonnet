@@ -83,7 +83,7 @@ local base_image_pipeline(arch) = {
       } + docker_defaults,
     },
   ],
-} + platform('arch');
+} + platform('arch') + pipeline_defaults;
 
 local test_image_pipeline(arch) = {
   depends_on: [
@@ -106,7 +106,7 @@ local test_image_pipeline(arch) = {
       } + docker_defaults,
     },
   ],
-} + platform('arch');
+} + platform('arch') + pipeline_defaults;
 
 local build_the_rest_pipeline(arch) = {
   depends_on: [
