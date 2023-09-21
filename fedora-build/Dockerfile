@@ -9,7 +9,23 @@ RUN set -x; \
 	yum -qy --setopt install_weak_deps=False upgrade-minimal && \
 	yum  -y --setopt install_weak_deps=False install clang compiler-rt lld cmake make pkgconf-pkg-config \
 		perl ragel file-devel glib2-devel libevent-devel libicu-devel luajit-devel openssl-devel sqlite-devel zlib-devel \
-		clang-devel llvm-devel libsodium-devel ninja-build hyperscan-devel && \
+		clang-devel llvm-devel libsodium-devel ninja-build && \
 	rm /var/log/*.log && rm -r /var/cache/dnf
+
+RUN sysArch="$(uname -m)" && \
+	case "$sysArch" in \
+		amd64) \
+			yum  -y --setopt install_weak_deps=False install hyperscan-devel ; \
+			;; \
+		arm64) \
+			rm -fr /vectorscan-src/ /vectorscan ; \
+			apt-get -qy install python3-dev libboost-dev && \
+			git clone https://github.com/VectorCamp/vectorscan --depth 1 --branch vectorscan/5.4.9 /vectorscan-src && \
+			(cd /vectorscan-src ; mkdir build ; cd build ; cmake .. -DCMAKE_C_COMPILER="$c_compiler" -DCMAKE_CXX_COMPILER="$cxx_compiler" -DCMAKE_INSTALL_PREFIX=/vectorscan -DCMAKE_BUILD_TYPE=Release -DFAT_RUNTIME=ON -DCMAKE_C_FLAGS="-fpic -fPIC" -DCMAKE_CXX_FLAGS="-fPIC -fpic" -DPCRE_SUPPORT_LIBBZ2=OFF; make -j4 ; make install) ; \
+			rm -fr /vectorscan-src/ ; \
+			;; \
+		*) \
+			;; \
+	esac
 
 USER nobody
