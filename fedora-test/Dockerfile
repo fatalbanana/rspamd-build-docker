@@ -40,8 +40,7 @@ RUN set -x; \
                         ;; \
                 *) \
                         ;; \
-        esac
-
+        esac && \
 	rm /var/log/*.log && rm -r /var/cache/dnf
 
 USER nobody
