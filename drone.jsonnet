@@ -158,7 +158,7 @@ local archspecific_pipeline(arch) = {
         build_args: [
           'FEDORA_VERSION=' + FEDORA_VERSION,
         ],
-        repo: 'rspamd/ci',
+        repo: ci_image,
         tags: [
           'fedora-test-' + arch,
         ],
