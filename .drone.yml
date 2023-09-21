@@ -41,10 +41,9 @@
 }
 ---
 {
-   "kind": "pipeline",
-   "name": "default-amd64",
+   "name": "base_image_amd64",
    "platform": {
-      "arch": "amd64",
+      "arch": "arch",
       "os": "linux"
    },
    "steps": [
@@ -70,11 +69,181 @@
                "from_secret": "docker_username"
             }
          }
-      },
+      }
+   ]
+}
+---
+{
+   "name": "base_image_arm64",
+   "platform": {
+      "arch": "arch",
+      "os": "linux"
+   },
+   "steps": [
       {
-         "depends_on": [
-            "base_image"
-         ],
+         "image": "plugins/docker",
+         "name": "base_image",
+         "settings": {
+            "build_args": [
+               "UBUNTU_VERSION=22.04"
+            ],
+            "dockerfile": "ubuntu-gcc/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-gcc/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "nerfd/ci",
+            "tags": [
+               "ubuntu-gcc-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ]
+}
+---
+{
+   "depends_on": [
+      "base_image_amd64",
+      "base_image_arm64"
+   ],
+   "kind": "pipeline",
+   "name": "multiarch_base_image",
+   "steps": [
+      {
+         "image": "plugins/manifest",
+         "name": "multiarch_base_image",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "nerfd/ci:ubuntu-gcc",
+            "template": "nerfd/ci:ubuntu-gcc-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "multiarch_base_image"
+   ],
+   "name": "test_image_amd64",
+   "platform": {
+      "arch": "arch",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "test_image",
+         "settings": {
+            "dockerfile": "ubuntu-test/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-test/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "nerfd/ci",
+            "tags": [
+               "ubuntu-test-amd64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ]
+}
+---
+{
+   "depends_on": [
+      "multiarch_base_image"
+   ],
+   "name": "test_image_arm64",
+   "platform": {
+      "arch": "arch",
+      "os": "linux"
+   },
+   "steps": [
+      {
+         "image": "plugins/docker",
+         "name": "test_image",
+         "settings": {
+            "dockerfile": "ubuntu-test/Dockerfile",
+            "label_schema": [
+               "docker.dockerfile=ubuntu-test/Dockerfile"
+            ],
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "repo": "nerfd/ci",
+            "tags": [
+               "ubuntu-test-arm64"
+            ],
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ]
+}
+---
+{
+   "depends_on": [
+      "test_image_amd64",
+      "test_image_arm64"
+   ],
+   "kind": "pipeline",
+   "name": "multiarch_test_image",
+   "steps": [
+      {
+         "image": "plugins/manifest",
+         "name": "multiarch_test_image",
+         "settings": {
+            "password": {
+               "from_secret": "docker_password"
+            },
+            "platforms": [
+               "linux/amd64",
+               "linux/arm64"
+            ],
+            "target": "nerfd/ci:ubuntu-test",
+            "template": "nerfd/ci:ubuntu-test-ARCH",
+            "username": {
+               "from_secret": "docker_username"
+            }
+         }
+      }
+   ],
+   "type": "docker"
+}
+---
+{
+   "depends_on": [
+      "multiarch_test_image"
+   ],
+   "kind": "pipeline",
+   "name": "default-amd64",
+   "platform": {
+      "arch": "amd64",
+      "os": "linux"
+   },
+   "steps": [
+      {
          "image": "plugins/docker",
          "name": "build_image",
          "settings": {
@@ -95,32 +264,6 @@
          }
       },
       {
-         "depends_on": [
-            "build_image"
-         ],
-         "image": "plugins/docker",
-         "name": "test_image",
-         "settings": {
-            "dockerfile": "ubuntu-test/Dockerfile",
-            "label_schema": [
-               "docker.dockerfile=ubuntu-test/Dockerfile"
-            ],
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "repo": "nerfd/ci",
-            "tags": [
-               "ubuntu-test-amd64"
-            ],
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
-      {
-         "depends_on": [
-            "test_image"
-         ],
          "image": "plugins/docker",
          "name": "func_test_image",
          "settings": {
@@ -344,6 +487,9 @@
 }
 ---
 {
+   "depends_on": [
+      "multiarch_test_image"
+   ],
    "kind": "pipeline",
    "name": "default-arm64",
    "platform": {
@@ -352,32 +498,6 @@
    },
    "steps": [
       {
-         "image": "plugins/docker",
-         "name": "base_image",
-         "settings": {
-            "build_args": [
-               "UBUNTU_VERSION=22.04"
-            ],
-            "dockerfile": "ubuntu-gcc/Dockerfile",
-            "label_schema": [
-               "docker.dockerfile=ubuntu-gcc/Dockerfile"
-            ],
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "repo": "nerfd/ci",
-            "tags": [
-               "ubuntu-gcc-arm64"
-            ],
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
-      {
-         "depends_on": [
-            "base_image"
-         ],
          "image": "plugins/docker",
          "name": "build_image",
          "settings": {
@@ -398,32 +518,6 @@
          }
       },
       {
-         "depends_on": [
-            "build_image"
-         ],
-         "image": "plugins/docker",
-         "name": "test_image",
-         "settings": {
-            "dockerfile": "ubuntu-test/Dockerfile",
-            "label_schema": [
-               "docker.dockerfile=ubuntu-test/Dockerfile"
-            ],
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "repo": "nerfd/ci",
-            "tags": [
-               "ubuntu-test-arm64"
-            ],
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
-      {
-         "depends_on": [
-            "test_image"
-         ],
          "image": "plugins/docker",
          "name": "func_test_image",
          "settings": {
@@ -652,29 +746,11 @@
       "default-arm64"
    ],
    "kind": "pipeline",
-   "name": "multiarchify",
+   "name": "multiarchify_the_rest",
    "steps": [
       {
          "image": "plugins/manifest",
-         "name": "ci_ubuntu_gcc",
-         "settings": {
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "platforms": [
-               "linux/amd64",
-               "linux/arm64"
-            ],
-            "target": "nerfd/ci:ubuntu-gcc",
-            "template": "nerfd/ci:ubuntu-gcc-ARCH",
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
-      {
-         "image": "plugins/manifest",
-         "name": "ci_ubuntu_build",
+         "name": "build_image",
          "settings": {
             "password": {
                "from_secret": "docker_password"
@@ -685,24 +761,6 @@
             ],
             "target": "nerfd/ci:ubuntu-build",
             "template": "nerfd/ci:ubuntu-build-ARCH",
-            "username": {
-               "from_secret": "docker_username"
-            }
-         }
-      },
-      {
-         "image": "plugins/manifest",
-         "name": "ci_ubuntu_test",
-         "settings": {
-            "password": {
-               "from_secret": "docker_password"
-            },
-            "platforms": [
-               "linux/amd64",
-               "linux/arm64"
-            ],
-            "target": "nerfd/ci:ubuntu-test",
-            "template": "nerfd/ci:ubuntu-test-ARCH",
             "username": {
                "from_secret": "docker_username"
             }
