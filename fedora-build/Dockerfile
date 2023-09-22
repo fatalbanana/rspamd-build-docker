@@ -5,6 +5,9 @@ ARG  cxx_compiler=clang
 
 FROM fedora:${FEDORA_VERSION}
 
+ENV c_compiler=$c_compiler
+ENV cxx_compiler=$cxx_compiler
+
 # clang-plugin build dependencies:
 #  * clang-devel
 #  * llvm-devel
