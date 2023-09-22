@@ -1,5 +1,8 @@
 # Fedora with runtime dependencies for rspamd
 ARG  FEDORA_VERSION=29
+ARG  c_compiler=clang
+ARG  cxx_compiler=clang
+
 FROM fedora:${FEDORA_VERSION}
 
 # rspamd runtime dependencies:

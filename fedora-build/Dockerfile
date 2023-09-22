@@ -1,5 +1,8 @@
 # Fedora with clang and build dependencies for rspamd
 ARG  FEDORA_VERSION=38
+ARG  c_compiler=clang
+ARG  cxx_compiler=clang
+
 FROM fedora:${FEDORA_VERSION}
 
 # clang-plugin build dependencies:
