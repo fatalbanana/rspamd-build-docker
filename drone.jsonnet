@@ -83,7 +83,7 @@ local base_image_pipeline(arch) = {
       } + docker_defaults,
     },
   ],
-} + platform(arch) + pipeline_defaults;
+} + platform(arch) + trigger + pipeline_defaults;
 
 local test_image_pipeline(arch) = {
   depends_on: [
@@ -106,7 +106,7 @@ local test_image_pipeline(arch) = {
       } + docker_defaults,
     },
   ],
-} + platform(arch) + pipeline_defaults;
+} + platform(arch) + trigger + pipeline_defaults;
 
 local build_ci_images(arch) = {
   depends_on: [
@@ -326,7 +326,7 @@ local multiarchify_the_rest = {
     'pkg-images-amd64',
     'pkg-images-arm64',
   ],
-} + final_multiarch_steps + pipeline_defaults;
+} + final_multiarch_steps + trigger + pipeline_defaults;
 
 local multiarch_base_image = {
   name: 'multiarch_base_image',
@@ -337,7 +337,7 @@ local multiarch_base_image = {
   steps: [
     multiarch_step('multiarch_base_image', ci_image, 'ubuntu-gcc'),
   ],
-} + pipeline_defaults;
+} + trigger + pipeline_defaults;
 
 local multiarch_build_image = {
   name: 'multiarch_build_image',
@@ -348,7 +348,7 @@ local multiarch_build_image = {
   steps: [
     multiarch_step('multiarch_build_image', ci_image, 'ubuntu-build'),
   ],
-} + pipeline_defaults;
+} + trigger + pipeline_defaults;
 
 local multiarch_test_image = {
   name: 'multiarch_test_image',
@@ -359,7 +359,7 @@ local multiarch_test_image = {
   steps: [
     multiarch_step('multiarch_test_image', ci_image, 'ubuntu-test'),
   ],
-} + pipeline_defaults;
+} + trigger + pipeline_defaults;
 
 local signature_placeholder = {
   kind: 'signature',
