@@ -14,12 +14,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - platform: linux/amd64
+          - label: amd64
             runner: ubuntu-22.04
-            label: amd64
-          - platform: linux/amd64
+          - label: arm64
             runner: ubuntu-22.04-arm
-            label: arm64
     permissions:
       packages: write
       contents: read
