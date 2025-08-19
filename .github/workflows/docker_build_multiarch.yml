@@ -19,8 +19,10 @@ jobs:
         include:
           - platform: linux/amd64
             runner: ubuntu-22.04
+            label: amd64
           - platform: linux/amd64
             runner: ubuntu-22.04-arm
+            label: arm64
     permissions:
       packages: write
       contents: read
@@ -38,7 +40,7 @@ jobs:
           context: ${{ inputs.name }}
           platforms: ${{ inputs.platforms }}
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.platform }}
+          tags: ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.label }}
 
   docker_manifest:
     name: docker_manifest
@@ -60,5 +62,5 @@ jobs:
         with:
           manifest_list: ghcr.io/${{ github.repository }}:${{ inputs.name }}
           images: |
-            ghcr.io/${{ github.repository }}:${{ inputs.name }}-linux/amd64
-            ghcr.io/${{ github.repository }}:${{ inputs.name }}-linux/arm64
+            ghcr.io/${{ github.repository }}:${{ inputs.name }}-amd64
+            ghcr.io/${{ github.repository }}:${{ inputs.name }}-arm64
