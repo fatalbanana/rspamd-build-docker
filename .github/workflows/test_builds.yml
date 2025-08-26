@@ -52,11 +52,13 @@ jobs:
     steps:
       - name: Check out rspamd
         uses: actions/checkout@v4
-        repository: rspamd/rspamd
+        with:
+          repository: rspamd/rspamd
 
       - name: Check out packpack
         uses: actions/checkout@v4
-        repository: packpack/packpack
+        with:
+          repository: packpack/packpack
 
       - name: Log in to the Container registry
         run: |
