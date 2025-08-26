@@ -2,7 +2,6 @@ name: Try build Rspamd
 
 on:
   workflow_call:
-    inputs:
 
 env:
   DISTRIBS_DEB: ubuntu-focal ubuntu-jammy ubuntu-noble debian-bullseye debian-bookworm
