@@ -69,27 +69,27 @@ jobs:
 
       - name: Test build
         run: |
-          ASAN=0
-          DEBIAN=0
-          RPM=0
-          LUAJIT=1
-          PRESERVE_ENVVARS=LUAJIT,ASAN
+          export ASAN=0
+          export DEBIAN=0
+          export RPM=0
+          export LUAJIT=1
+          export PRESERVE_ENVVARS=LUAJIT,ASAN
 
           for DIST in $DISTRIBS_DEB; do
             if [[ "${{ matrix.image }}" == "$DIST" ]]; then
-              DEBIAN=1
+              export DEBIAN=1
             fi
           done
           for DIST in $DISTRIBS_RPM; do
             if [[ "${{ matrix.image }}" == "$DIST" ]]; then
-              RPM=1
+              export RPM=1
             fi
           done
 
-          DOCKER_IMAGE=${{ matrix.image }}
-          DOCKER_REPO=ghcr.io/${{ github.repository }}
+          export DOCKER_IMAGE=${{ matrix.image }}
+          export DOCKER_REPO=ghcr.io/${{ github.repository }}
 
           cd rspamd
           ../packpack/packpack
-          ASAN=1
+          export ASAN=1
           ../packpack/packpack
