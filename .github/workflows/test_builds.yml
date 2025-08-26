@@ -91,5 +91,7 @@ jobs:
 
           cd rspamd
           ../packpack/packpack
-          export ASAN=1
-          ../packpack/packpack
+          if [ $RPM -eq 1 ]; then
+            export ASAN=1
+            ../packpack/packpack
+          fi
