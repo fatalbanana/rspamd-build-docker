@@ -1,17 +1,15 @@
 name: Try build Rspamd
 
-on:
-  workflow_call:
-    inputs:
-      image:
-        required: true
-        type: string
-      pkg_type:
-        required: true
-        type: string
-        options:
-          - deb
-          - rpm
+inputs:
+  image:
+    required: true
+    type: string
+  pkg_type:
+    required: true
+    type: string
+    options:
+      - deb
+      - rpm
 
 runs:
   using: "composite"
