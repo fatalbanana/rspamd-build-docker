@@ -44,7 +44,7 @@ jobs:
         name: Test Docker image
         uses: ./.github/actions/test_pkg
         with:
-          image: ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.label }}
+          image: ${{ inputs.name }}-${{ matrix.label }}
           pkg_type: ${{ inputs.pkg_test }}
 
   docker_manifest:
