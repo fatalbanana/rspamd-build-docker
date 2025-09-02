@@ -44,7 +44,7 @@ runs:
           exit 1
         fi
 
-        export DOCKER_IMAGE=${{ matrix.image }}
+        export DOCKER_IMAGE=${{ inputs.image }}
         export DOCKER_REPO=ghcr.io/${{ github.repository }}
 
         cd rspamd
