@@ -42,7 +42,7 @@ jobs:
 
       - if: ${{ inputs.pkg_test != 'none' }}
         name: Test Docker image
-        uses: ./.github/workflows/test_pkg.yml
+        uses: ./.github/actions/test_pkg
         with:
           image: ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.label }}
           pkg_type: ${{ inputs.pkg_test }}
