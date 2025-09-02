@@ -29,6 +29,7 @@ runs:
         path: packpack
 
     - name: Test build
+      shell: bash
       run: |
         export ASAN=0
         export DEBIAN=0
