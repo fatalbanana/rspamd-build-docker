@@ -40,12 +40,35 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}:${{ inputs.name }}-${{ matrix.label }}
 
-      - if: ${{ inputs.pkg_test != 'none' }}
-        name: Test Docker image
+  test_pkg:
+    name: test_pkg
+    if: ${{ inputs.pkg_test != 'none' }}
+    needs: docker_manifest
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - label: amd64
+            runner: ubuntu-22.04
+          - label: arm64
+            runner: ubuntu-22.04-arm
+    permissions:
+      packages: read
+      contents: read
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        run: |
+          docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+
+      - name: Test Docker image
         uses: ./.github/actions/test_pkg
         with:
           image: ${{ inputs.name }}-${{ matrix.label }}
           pkg_type: ${{ inputs.pkg_test }}
+
 
   docker_manifest:
     name: docker_manifest
