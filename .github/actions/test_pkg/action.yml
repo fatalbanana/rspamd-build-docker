@@ -17,8 +17,9 @@ runs:
     - name: Check out rspamd
       uses: actions/checkout@v4
       with:
-        repository: rspamd/rspamd
+        repository: fatalbanana/rspamd
         path: rspamd
+        ref: el10_toolset
 
     - name: Check out packpack
       uses: actions/checkout@v4
